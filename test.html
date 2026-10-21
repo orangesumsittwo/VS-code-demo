@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>霓虹名片 · 科技感个人卡片</title>
+  <!-- 引入 Google Fonts 提升字体质感 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <!-- Font Awesome 图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0b0d15;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 1.5rem;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 背景装饰光晕 */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(0, 255, 255, 0.12) 0%, transparent 70%);
+      top: -200px;
+      right: -150px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(180, 0, 255, 0.1) 0%, transparent 70%);
+      bottom: -150px;
+      left: -100px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 名片卡片 */
+    .cyber-card {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 860px;
+      background: rgba(17, 21, 34, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 2.2rem;
+      padding: 2.8rem 2.8rem 2.5rem;
+      box-shadow: 
+        0 40px 70px -20px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(0, 255, 255, 0.15),
+        0 0 40px rgba(0, 255, 255, 0.1) inset;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .cyber-card:hover {
+      box-shadow: 
+        0 50px 80px -20px rgba(0, 0, 0, 0.9),
+        0 0 0 1px rgba(0, 255, 255, 0.3),
+        0 0 60px rgba(0, 255, 255, 0.15) inset;
+      border-color: rgba(0, 255, 255, 0.35);
+      transform: translateY(-3px);
+    }
+
+    /* 顶部状态栏 */
+    .card-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #00e0ff;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ffaa;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00ffaa;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+
+    .card-top-bar .id-number {
+      font-size: 0.75rem;
+      color: #6f7f9f;
+      letter-spacing: 1.5px;
+      font-weight: 400;
+    }
+
+    /* 布局：左侧头像+右侧信息（与上一版类似但风格不同） */
+    .card-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    /* 左侧头像区域 */
+    .profile-section {
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-right: 1px solid rgba(0, 255, 255, 0.1);
+      padding-right: 1.8rem;
+    }
+
+    .avatar-frame {
+      width: 150px;
+      height: 150px;
+      border-radius: 2rem;
+      background: linear-gradient(145deg, #0f1a2f, #1a253f);
+      padding: 4px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.3), 0 0 0 1px rgba(0, 255, 255, 0.3);
+      transition: box-shadow 0.3s;
+    }
+
+    .avatar-frame:hover {
+      box-shadow: 0 0 35px rgba(0, 255, 255, 0.5), 0 0 0 1px rgba(0, 255, 255, 0.5);
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 1.8rem;
+      background: linear-gradient(135deg, #111a2e, #1e2a47);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: #00e0ff;
+      text-shadow: 0 0 20px rgba(0, 224, 255, 0.7);
+      border: 2px solid rgba(0, 255, 255, 0.4);
+      letter-spacing: 2px;
+    }
+
+    .name {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.3rem;
+      text-shadow: 0 0 20px rgba(0, 224, 255, 0.3);
+    }
+
+    .title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #00e0ff;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .title-divider {
+      width: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00e0ff, transparent);
+      margin: 0.5rem auto;
+    }
+
+    .id-tag {
+      background: rgba(0, 224, 255, 0.1);
+      border: 1px solid rgba(0, 224, 255, 0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      color: #a0d0ff;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .id-tag i {
+      color: #00e0ff;
+    }
+
+    /* 右侧详细信息区域 */
+    .info-section {
+      flex: 2 1 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+    }
+
+    .headline {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      letter-spacing: -0.02em;
+    }
+
+    .headline i {
+      color: #00e0ff;
+      font-size: 1.5rem;
+      text-shadow: 0 0 15px rgba(0, 224, 255, 0.7);
+    }
+
+    .bio {
+      color: #a8b8d8;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      font-weight: 400;
+      background: rgba(0, 224, 255, 0.04);
+      padding: 1rem 1.4rem;
+      border-radius: 1rem;
+      border-left: 3px solid #00e0ff;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.05) inset;
+    }
+
+    /* 联系方式网格 */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.9rem;
+      margin-top: 0.2rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: #c0d0e8;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.7rem 1rem;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(0, 255, 255, 0.15);
+      transition: all 0.2s;
+      font-weight: 400;
+      word-break: break-word;
+      backdrop-filter: blur(2px);
+    }
+
+    .contact-item:hover {
+      background: rgba(0, 224, 255, 0.08);
+      border-color: rgba(0, 224, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .contact-item i {
+      width: 1.2rem;
+      color: #00e0ff;
+      font-size: 1rem;
+      text-align: center;
+      filter: drop-shadow(0 0 5px rgba(0, 224, 255, 0.5));
+    }
+
+    /* 技能标签 */
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.3rem;
+    }
+
+    .skill-tag {
+      background: rgba(0, 224, 255, 0.08);
+      color: #a0e0ff;
+      padding: 0.4rem 1.1rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(0, 224, 255, 0.25);
+      backdrop-filter: blur(2px);
+      transition: all 0.2s;
+    }
+
+    .skill-tag:hover {
+      background: rgba(0, 224, 255, 0.2);
+      border-color: #00e0ff;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(0, 224, 255, 0.2);
+    }
+
+    /* 底部社交与二维码区域 */
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(0, 255, 255, 0.1);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.8rem;
+      background: rgba(255, 255, 255, 0.03);
+      color: #a0c0e0;
+      font-size: 1.1rem;
+      transition: all 0.25s;
+      text-decoration: none;
+      border: 1px solid rgba(0, 224, 255, 0.2);
+    }
+
+    .social-link:hover {
+      background: #00e0ff;
+      color: #0b0d15;
+      border-color: #00e0ff;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px -8px #00e0ff;
+    }
+
+    .qr-section {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: #6f8faf;
+      font-size: 0.8rem;
+      letter-spacing: 0.5px;
+    }
+
+    .qr-placeholder {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 224, 255, 0.05);
+      border: 1px dashed rgba(0, 224, 255, 0.4);
+      border-radius: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #00e0ff;
+      font-size: 1.8rem;
+      box-shadow: 0 0 15px rgba(0, 224, 255, 0.1) inset;
+      transition: 0.2s;
+    }
+
+    .qr-placeholder:hover {
+      background: rgba(0, 224, 255, 0.1);
+      border-color: #00e0ff;
+    }
+
+    /* 响应式 */
+    @media (max-width: 700px) {
+      .cyber-card {
+        padding: 1.8rem;
+        border-radius: 1.8rem;
+      }
+
+      .card-content {
+        gap: 1.8rem;
+      }
+
+      .profile-section {
+        flex: 1 1 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        padding-right: 0;
+        padding-bottom: 1.8rem;
+      }
+
+      .avatar-frame {
+        width: 130px;
+        height: 130px;
+      }
+
+      .avatar {
+        font-size: 3.8rem;
+      }
+
+      .name {
+        font-size: 1.8rem;
+      }
+
+      .info-section {
+        flex: 1 1 100%;
+      }
+
+      .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .headline {
+        font-size: 1.3rem;
+      }
+
+      .bio {
+        font-size: 0.92rem;
+      }
+
+      .card-top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
+    /* 自定义滚动条（如果有） */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0d15;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #00e0ff;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="cyber-card">
+    <!-- 顶部状态栏，增加科技感 -->
+    <div class="card-top-bar">
+      <div class="status-badge">
+        <span class="status-dot"></span> ONLINE · 可接洽
+      </div>
+      <div class="id-number">ID: #CYBER-2087</div>
+    </div>
+
+    <div class="card-content">
+      <!-- 左侧头像区 -->
+      <div class="profile-section">
+        <div class="avatar-frame">
+          <!-- 使用首字母作为头像，可替换为 <img> 标签 -->
+          <div class="avatar">林</div>
+        </div>
+        <div class="name">林 星 野</div>
+        <div class="title">AI 交互设计师</div>
+        <div class="title-divider"></div>
+        <div class="id-tag">
+          <i class="fas fa-shield-alt"></i> 认证开发者
+        </div>
+      </div>
+
+      <!-- 右侧信息区 -->
+      <div class="info-section">
+        <div class="headline">
+          <i class="fas fa-bolt"></i> 探索数字边界
+        </div>
+        <p class="bio">
+          专注于人机交互与生成式 AI 设计，善于将复杂算法转化为直觉体验。相信未来的界面是无形且智能的，致力于创造有温度的科技产品。
+        </p>
+
+        <!-- 联系方式 -->
+        <div class="contact-grid">
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>xingye.lin@future.ai</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <span>+86 186 8888 6666</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>中国 · 深圳 · 南山</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-globe"></i>
+            <span>linxingye.tech</span>
+          </div>
+        </div>
+
+        <!-- 技能标签 -->
+        <div class="skill-tags">
+          <span class="skill-tag">AI 交互</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">ProtoPie</span>
+          <span class="skill-tag">Three.js</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">用户研究</span>
+          <span class="skill-tag">设计系统</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部区域：社交链接 + 二维码 -->
+    <div class="card-footer">
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        <a href="#" class="social-link" aria-label="个人网站"><i class="fas fa-globe"></i></a>
+      </div>
+      <div class="qr-section">
+        <div class="qr-placeholder">
+          <i class="fas fa-qrcode"></i>
+        </div>
+        <span>扫码联系</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
