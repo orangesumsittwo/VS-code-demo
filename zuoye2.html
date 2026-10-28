@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>科技工作者建言 - 留言板</title>
+    <style>
+        body {
+            font-family: "宋体", Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            background-color: #ffffff; 
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 最外层主容器 */
+        .container {
+            width: 850px;
+            margin: 0 auto;
+            background-color: #f5faff; 
+            border: 1px solid #dce8f5;
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        }
+
+        /* 顶部标题栏 */
+        .header {
+            background-color: #f5faff; 
+            padding: 15px 20px;
+            border-bottom: 2px solid #ffffff; 
+            overflow: hidden; 
+        }
+
+        /* 左侧“留言板” */
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #003399; 
+            font-weight: bold;
+            float: left;
+            font-family: "黑体", sans-serif;
+        }
+
+        /* 右上角“科技工作者建言” */
+        .header .sub-title {
+            float: right;
+            color: #003399; 
+            font-weight: 900; 
+            font-family: "黑体", sans-serif; 
+            font-size: 15px; 
+            margin-top: 6px; 
+            letter-spacing: 1px; 
+        }
+
+        /* 内容主体区域 */
+        .content {
+            padding: 10px 20px 20px 20px;
+        }
+
+        /* 红色提示文字 */
+        .notice-text {
+            color: #ff0000;
+            font-size: 13px;
+            margin-bottom: 5px;
+            padding-left: 5px;
+            font-weight: bold;
+        }
+
+        /* 表单表格样式 */
+        .form-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #f5faff; 
+            border: 2px solid #ffffff; 
+        }
+
+        /* 所有单元格加白色细线 */
+        .form-table td {
+            padding: 8px 10px;
+            vertical-align: middle;
+            border-bottom: 2px solid #ffffff; 
+            border-right: 2px solid #ffffff;  
+        }
+
+        .form-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 表格左侧标签列 */
+        .label-col {
+            width: 100px;
+            text-align: center; 
+            color: #008000; 
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding-right: 0 !important; 
+            border-right: 2px solid #ffffff; 
+        }
+
+        /* 输入框、文本域 */
+        input[type="text"], textarea {
+            border: 1px solid #b8d4ec; 
+            padding: 3px;
+            font-family: inherit;
+            font-size: 13px;
+            background-color: #fbfdff; 
+            color: #333;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
+            background-color: #ffffff; 
+            outline: none;
+        }
+
+        .input-name {
+            width: 120px;
+        }
+
+        .input-email {
+            width: 350px;
+        }
+
+        /* --- 重点修改：下拉框样式 --- */
+        select {
+            border: 1px solid #b8d4ec; 
+            padding: 2px 20px 2px 5px; /* 右侧留出空间放黑三角 */
+            font-family: inherit;
+            font-size: 13px;
+            background-color: #fbfdff; 
+            color: #ff0000; 
+            font-weight: bold;
+            
+            /* 隐藏浏览器默认的下拉箭头 */
+            -webkit-appearance: none; 
+            -moz-appearance: none; 
+            appearance: none; 
+            
+            /* 使用 SVG 绘制一个实心黑三角作为背景 */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 2px center; /* 黑三角靠右居中 */
+            background-size: 16px; /* 黑三角的大小 */
+            cursor: pointer;
+        }
+
+        /* 单选框排列 */
+        .radio-group {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        .radio-group label {
+            margin-right: 10px;
+            cursor: pointer;
+            color: #ff0000; 
+            font-weight: bold;
+        }
+
+        /* 留言文本域 */
+        .textarea-msg {
+            width: 450px;
+            height: 100px;
+            resize: vertical;
+            display: block;
+        }
+
+        /* 提示信息区域 */
+        .tips {
+            color: #0000ff; 
+            font-size: 13px;
+            line-height: 1.5;
+            font-weight: bold; 
+        }
+
+        /* 按钮区域 */
+        .btn-group {
+            text-align: center;
+        }
+
+        .btn-group button {
+            padding: 3px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #f0f7ff; 
+            border: 1px solid #b8d4ec; 
+            font-size: 13px;
+            color: #000000; 
+            font-weight: bold;
+        }
+
+        .btn-group button:hover {
+            background-color: #e1edf9;
+        }
+
+        /* 底部法律声明内容样式 */
+        .footer-rules-content {
+            color: #0000ff;
+            font-size: 13px;
+            line-height: 1.8;
+            margin: 0;
+            padding-left: 20px;
+            font-weight: bold; 
+        }
+        
+        .footer-rules-content li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 顶部标题 -->
+    <div class="header">
+        <h1>留言板</h1>
+        <span class="sub-title">科技工作者建言</span>
+    </div>
+
+    <!-- 主体内容 -->
+    <div class="content">
+        <div class="notice-text">发表留言</div>
+        
+        <form action="#" method="post">
+            <table class="form-table">
+                <tr>
+                    <td class="label-col">姓 名：</td>
+                    <td><input type="text" name="username" class="input-name"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">电子邮件：</td>
+                    <td><input type="text" name="email" class="input-email"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">分 类：</td>
+                    <td style="color: #ff0000; font-weight: bold; padding-left: 15px !important;">
+                        <span style="margin-right: 15px;">科技工作者建言</span>
+                        
+                        <span class="radio-group">
+                            <label><input type="radio" name="type" value="不保密">不保密</label>
+                            <label><input type="radio" name="type" value="保密">保密</label>
+                        </span>
+                        
+                        <span style="margin-left: 20px;">留言类型：</span>
+                        <select name="msg_type">
+                            <option value=""></option>
+                            <option value="1">建议</option>
+                            <option value="2">意见</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-col">留 言：</td>
+                    <td>
+                        <textarea name="message" class="textarea-msg"></textarea>
+                    </td>
+                </tr>
+                
+                <!-- 注：提示信息行 -->
+                <tr>
+                    <td colspan="2" style="padding: 10px 15px;">
+                        <div class="tips">
+                            注：如果您的留言不便公开，请选择“保密”选项，提交后可凭系统反馈给您的留言编号、查询密码和您的姓名查询回复。
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 提交按钮行 -->
+                <tr>
+                    <td colspan="2" class="btn-group" style="padding: 15px 0;">
+                        <button type="submit">提交</button>
+                        <button type="reset">清空</button>
+                    </td>
+                </tr>
+                
+                <!-- 底部法律声明行 -->
+                <tr>
+                    <td colspan="2" style="padding: 15px 30px;">
+                        <ul class="footer-rules-content">
+                            <li>请遵守国家有关法律、法规，尊重网上道德，承担一切因您的行为而直接或间接引起的法律责任。</li>
+                            <li>本网站拥有管理笔名和留言的一切权利。</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

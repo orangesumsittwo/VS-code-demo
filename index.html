@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="成都·幻境 —— 天府之国·动漫幻城。赛博霓虹风成都城市宣传。">
+<title>成都·幻境｜天府之国·动漫幻城</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+/* ========== 基础 & 变量 ========== */
+:root{
+  --bg:#0b0e1a;
+  --pink:#ff6ec7;
+  --blue:#4fc3ff;
+  --purple:#a55eea;
+  --gold:#ffd76e;
+  --glass:rgba(255,255,255,.055);
+  --border:rgba(255,255,255,.14);
+  --txt:#eaf6ff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans SC','Montserrat',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+::selection{background:rgba(79,195,255,.35);color:#fff}
+
+/* ========== 自定义滚动条（粉蓝渐变 圆角） ========== */
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#070a14}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--pink),var(--blue));border-radius:20px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--gold),var(--purple))}
+
+/* ========== 动态全屏背景（四色径向光晕） ========== */
+#bg{position:fixed;inset:0;z-index:-2;overflow:hidden;background:
+  radial-gradient(ellipse at 50% -12%,rgba(120,80,220,.30),transparent 55%),
+  radial-gradient(ellipse at 112% 92%,rgba(0,190,255,.20),transparent 50%),
+  radial-gradient(ellipse at -12% 96%,rgba(255,80,170,.18),transparent 50%),
+  var(--bg)}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.45;animation:orbDrift 18s ease-in-out infinite alternate}
+.orb.o1{width:480px;height:480px;top:-140px;left:-120px;background:radial-gradient(circle,rgba(255,46,149,.5),transparent 70%)}
+.orb.o2{width:520px;height:520px;top:-100px;right:-140px;animation-delay:-6s;background:radial-gradient(circle,rgba(60,160,255,.45),transparent 70%)}
+.orb.o3{width:460px;height:460px;bottom:-150px;left:8%;animation-delay:-12s;background:radial-gradient(circle,rgba(150,80,255,.42),transparent 70%)}
+.orb.o4{width:420px;height:420px;bottom:-120px;right:6%;animation-delay:-9s;background:radial-gradient(circle,rgba(255,190,90,.34),transparent 70%)}
+@keyframes orbDrift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(60px,-40px) scale(1.15)}}
+/* 星星容器与闪烁动画（尺寸/时长由 JS 动态注入） */
+#stars{position:absolute;inset:0}
+.star{position:absolute;border-radius:50%;animation:twinkle var(--dur,2s) ease-in-out infinite;pointer-events:none}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.7)}50%{opacity:1;transform:scale(1.25)}}
+
+/* ========== 导航栏 ========== */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 6vw;background:rgba(11,14,26,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font-family:'Montserrat','Noto Sans SC',sans-serif;font-weight:800;font-size:1.3rem;letter-spacing:2px}
+.logo .dragon{font-size:1.55rem;color:var(--gold);filter:drop-shadow(0 0 12px rgba(255,215,131,.85));animation:dragonGlow 2.6s ease-in-out infinite}
+@keyframes dragonGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(255,215,131,.7))}50%{filter:drop-shadow(0 0 18px rgba(255,110,199,.9))}}
+.logo-text{background:linear-gradient(90deg,var(--pink) 0%,var(--blue) 50%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 14px rgba(79,195,255,.5))}
+.nav-links{display:flex;gap:2.4rem;list-style:none}
+.nav-links a{position:relative;padding:6px 2px;color:rgba(234,246,255,.82);text-decoration:none;font-weight:500;font-size:1rem;letter-spacing:2px;transition:color .3s,text-shadow .3s}
+.nav-links a::after{content:'';position:absolute;left:50%;bottom:0;width:0;height:2.5px;border-radius:4px;background:linear-gradient(90deg,var(--pink),var(--blue),var(--gold));transform:translateX(-50%);transition:width .35s ease}
+.nav-links a:hover{color:#fff;text-shadow:0 0 14px rgba(120,210,255,.8)}
+.nav-links a:hover::after{width:100%}
+/* ========== Hero 主视觉 ========== */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 5vw 190px;overflow:hidden}
+.hero-tag{font-family:'Montserrat','Noto Sans SC';font-size:.78rem;letter-spacing:8px;color:var(--gold);text-shadow:0 0 16px rgba(255,215,131,.7);margin-bottom:22px;font-weight:600}
+.title{font-family:'Montserrat','Noto Sans SC',sans-serif;font-size:clamp(4rem,12vw,9rem);font-weight:900;line-height:1.02;letter-spacing:.05em;
+  background:linear-gradient(100deg,#ff7ad0 0%,#4fc3ff 28%,#a55eea 58%,#ffd76e 100%);
+  background-size:220% 220%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:titleFloat 4.5s ease-in-out infinite,gradShift 7s ease infinite;
+  filter:drop-shadow(0 0 22px rgba(165,94,234,.55)) drop-shadow(0 0 48px rgba(79,195,255,.35))}
+@keyframes titleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.subtitle{display:inline-flex;align-items:center;gap:14px;margin:30px 0 32px;font-family:'Montserrat','Noto Sans SC';font-size:clamp(1.05rem,2.5vw,1.55rem);font-weight:600;letter-spacing:.38em;color:#c7d6ff;text-shadow:0 0 20px rgba(79,195,255,.55)}
+.subtitle i{color:var(--gold);filter:drop-shadow(0 0 10px rgba(255,215,131,.95));animation:starPulse 1.8s ease-in-out infinite}
+@keyframes starPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.45);opacity:.65}}
+.desc{max-width:660px;padding:18px 38px;border-radius:999px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:rgba(234,246,255,.82);line-height:2;font-size:.97rem;letter-spacing:1px;box-shadow:0 8px 34px rgba(0,0,0,.35), inset 0 0 24px rgba(255,255,255,.03)}
+.desc b{font-weight:700;background:linear-gradient(90deg,var(--pink),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta{position:relative;margin-top:44px;display:inline-flex;align-items:center;gap:12px;overflow:hidden;padding:16px 54px;border-radius:999px;background:rgba(79,195,255,.06);border:2px solid rgba(79,195,255,.9);color:#fff;font-family:'Montserrat','Noto Sans SC';font-size:1.05rem;font-weight:700;letter-spacing:4px;cursor:pointer;text-decoration:none;transition:transform .3s,box-shadow .35s,border-color .35s;box-shadow:0 0 0 2px rgba(79,195,255,.25),0 0 26px rgba(79,195,255,.3),inset 0 0 18px rgba(79,195,255,.12)}
+.cta::before{content:'';position:absolute;top:0;left:-130%;width:55%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .6s ease}
+.cta:hover{transform:translateY(-3px) scale(1.06);border-color:rgba(255,110,199,.9);box-shadow:0 0 0 2px rgba(255,110,199,.3),0 0 42px rgba(79,195,255,.6),0 0 84px rgba(255,110,199,.35),inset 0 0 22px rgba(255,110,199,.2)}
+.cta:hover::before{left:135%}
+.cta:active,.cta.clicked{transform:scale(.93)}
+.hero-wave{position:absolute;bottom:-1px;left:0;width:100%;height:170px;pointer-events:none}
+.hero-wave svg{width:100%;height:100%}
+
+/* ========== Hero 全屏背景视频 ========== */
+.hero-media{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.hero-media video{width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(1.15)}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,14,26,.8) 0%,rgba(11,14,26,.45) 38%,rgba(11,14,26,.58) 76%,var(--bg) 100%)}
+.video-mute{position:absolute;left:6vw;bottom:34px;z-index:5;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:rgba(234,246,255,.75);font-family:'Noto Sans SC',sans-serif;font-size:.78rem;letter-spacing:1px;cursor:pointer;transition:all .3s ease}
+.video-mute i{color:var(--blue);filter:drop-shadow(0 0 6px rgba(79,195,255,.8))}
+.video-mute:hover{color:#fff;border-color:rgba(79,195,255,.6);box-shadow:0 0 18px rgba(79,195,255,.35);transform:translateY(-2px)}
+
+/* ========== 悬浮 BGM 按钮 ========== */
+.music-btn{position:fixed;right:28px;bottom:28px;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:62px;height:62px;border-radius:50%;border:1px solid rgba(79,195,255,.55);background:rgba(14,19,38,.65);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);cursor:pointer;box-shadow:0 0 22px rgba(79,195,255,.35),inset 0 0 16px rgba(79,195,255,.12);transition:all .35s ease}
+.music-btn:hover{transform:translateY(-7px) scale(1.06);box-shadow:0 0 34px rgba(255,110,199,.55),0 0 60px rgba(255,110,199,.25),inset 0 0 18px rgba(255,110,199,.18)}
+.music-btn i{font-size:1.35rem;color:var(--pink);filter:drop-shadow(0 0 8px rgba(255,110,199,.9));transition:color .3s}
+.music-btn.playing{box-shadow:0 0 30px rgba(255,110,199,.5),inset 0 0 16px rgba(255,110,199,.15)}
+.music-btn.playing i{animation:discSpin 3s linear infinite}
+@keyframes discSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.eq{display:flex;align-items:flex-end;gap:3px;height:14px}
+.eq i{display:block;width:3px;height:5px;border-radius:2px;background:linear-gradient(180deg,var(--pink),var(--blue));opacity:0;transition:opacity .3s ease}
+.music-btn.playing .eq i{opacity:1;animation:eqBounce 1s ease-in-out infinite}
+.music-btn.playing .eq i:nth-child(1){animation-delay:0s}
+.music-btn.playing .eq i:nth-child(2){animation-delay:.2s}
+.music-btn.playing .eq i:nth-child(3){animation-delay:.4s}
+@keyframes eqBounce{0%,100%{height:4px}50%{height:14px}}
+.music-btn.disabled{opacity:.45;cursor:not-allowed;animation:none}
+.music-btn.disabled:hover{transform:none;box-shadow:0 0 22px rgba(79,195,255,.35),inset 0 0 16px rgba(79,195,255,.12)}
+
+/* ========== 通用区块 ========== */
+section{position:relative;padding:110px 7vw;scroll-margin-top:80px}
+.section-head{text-align:center;margin-bottom:64px}
+.kicker{font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:6px;color:var(--gold);text-shadow:0 0 14px rgba(255,215,131,.65)}
+.section-title{font-family:'Montserrat','Noto Sans SC';margin-top:12px;font-size:clamp(2rem,5vw,3.2rem);font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,var(--pink),var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(165,94,234,.5))}
+.section-sub{margin-top:14px;color:rgba(234,246,255,.58);font-size:.95rem;letter-spacing:3px}
+/* ========== 特色卡片 · 蓉城四韵 ========== */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;max-width:1220px;margin:0 auto}
+.card{position:relative;padding:166px 26px 40px;border-radius:22px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);text-align:center;overflow:hidden;transition:transform .35s ease,box-shadow .35s ease,background .35s ease}
+.card-img{position:absolute;top:0;left:0;width:100%;height:150px;overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;filter:saturate(1.12)}
+.card:hover .card-img img{transform:scale(1.08)}
+.card-img::after{content:'';position:absolute;left:0;right:0;bottom:0;height:62px;background:linear-gradient(180deg,transparent,rgba(11,14,26,.92))}
+.card::before{content:'';position:absolute;inset:0;border-radius:22px;padding:1.6px;background:linear-gradient(120deg,var(--pink),var(--blue),var(--purple),var(--gold),var(--pink));background-size:300% 300%;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s ease;animation:borderFlow 5s linear infinite}
+@keyframes borderFlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.card:hover::before{opacity:1}
+.card:hover{transform:translateY(-12px) scale(1.03);background:rgba(255,255,255,.09);box-shadow:0 20px 52px rgba(0,0,0,.45),0 0 36px rgba(129,140,255,.3)}
+.card .icon{position:relative;width:80px;height:80px;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;border-radius:22px;background:rgba(255,255,255,.06);border:1px solid var(--border)}
+.card .icon::before{content:'';position:absolute;inset:-3px;border-radius:26px;background:linear-gradient(135deg,var(--c1),var(--c2));filter:blur(15px);opacity:.3;z-index:-1;transition:opacity .35s ease}
+.card:hover .icon::before{opacity:.8}
+.card .icon i{font-size:2.15rem;background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px var(--c2))}
+.card h3{font-family:'Montserrat','Noto Sans SC';margin-bottom:12px;font-size:1.32rem;font-weight:800;letter-spacing:1px}
+.card p{color:rgba(234,246,255,.64);font-size:.9rem;line-height:1.9}
+.card.c-bear{--c1:#ff6ec7;--c2:#4fc3ff}
+.card.c-spicy{--c1:#ff5e5e;--c2:#ffb347}
+.card.c-opera{--c1:#ffd76e;--c2:#a55eea}
+.card.c-taikoo{--c1:#4fc3ff;--c2:#a55eea}
+
+/* ========== 文化区块 ========== */
+.culture{display:flex;gap:70px;align-items:center;justify-content:center;max-width:1180px;margin:0 auto;flex-wrap:wrap}
+.panda-box{flex:0 0 400px;display:flex;align-items:center;justify-content:center;position:relative}
+.panda-box::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,110,199,.4),rgba(79,195,255,.14) 55%,transparent 72%);filter:blur(28px);animation:haloPulse 4s ease-in-out infinite}
+@keyframes haloPulse{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.14)}}
+.panda{font-size:11rem;line-height:1;position:relative;z-index:1;filter:drop-shadow(0 0 26px rgba(255,110,199,.6)) drop-shadow(0 0 60px rgba(79,195,255,.45));animation:pandaFloat 5s ease-in-out infinite}
+@keyframes pandaFloat{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-18px) rotate(5deg)}}
+.culture-text{flex:1;min-width:300px}
+.culture-title{font-family:'Montserrat','Noto Sans SC';font-size:clamp(1.9rem,4.5vw,2.9rem);font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--pink),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(255,110,199,.55))}
+.culture-desc{position:relative;margin:20px 0 30px;padding-left:22px;color:rgba(234,246,255,.75);font-size:.98rem;line-height:2.1;letter-spacing:1px}
+.culture-desc::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:4px;background:linear-gradient(180deg,var(--pink),var(--blue));box-shadow:0 0 14px rgba(79,195,255,.7)}
+.tags{display:flex;flex-wrap:wrap;gap:14px}
+.tag{padding:11px 24px;border-radius:999px;border:1px solid var(--border);background:var(--glass);color:rgba(234,246,255,.85);font-size:.9rem;letter-spacing:1px;cursor:pointer;text-decoration:none;transition:all .35s ease}
+.tag i{margin-right:8px;font-size:.8rem;color:var(--gold)}
+.tag:hover{color:#fff;transform:translateY(-4px) scale(1.06);border-color:transparent;background:linear-gradient(90deg,var(--pink),var(--blue));box-shadow:0 0 24px rgba(79,195,255,.6)}
+.culture-photo{margin-top:28px;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 16px 44px rgba(0,0,0,.45)}
+.culture-photo img{width:100%;height:230px;object-fit:cover;transition:transform .45s ease;filter:saturate(1.12)}
+.culture-photo:hover img{transform:scale(1.05)}
+/* ========== 美食区 ========== */
+.food-banner{position:relative;max-width:1120px;height:190px;margin:0 auto 34px;border-radius:22px;overflow:hidden;border:1px solid var(--border);box-shadow:0 16px 44px rgba(0,0,0,.45)}
+.food-banner img{width:100%;height:100%;object-fit:cover;filter:saturate(1.15)}
+.food-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,14,26,.7),rgba(11,14,26,.2) 50%,rgba(11,14,26,.7))}
+.food-strip{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;max-width:1120px;margin:0 auto}
+.food-item{display:flex;align-items:center;gap:14px;padding:18px 28px;border-radius:18px;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:transform .35s ease,box-shadow .35s ease;cursor:pointer}
+.food-item:hover{transform:translateY(-7px);box-shadow:0 14px 38px rgba(0,0,0,.42),0 0 28px rgba(255,110,199,.32)}
+.food-item i{font-size:1.7rem;background:linear-gradient(135deg,var(--gold),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 8px rgba(255,179,71,.6))}
+.food-item span{font-weight:600;letter-spacing:2px;color:rgba(234,246,255,.92)}
+.food-item small{display:block;margin-top:2px;font-size:.75rem;color:rgba(234,246,255,.5);letter-spacing:1px}
+
+/* ========== 页脚 ========== */
+footer{padding:42px 20px;text-align:center;border-top:1px solid rgba(255,255,255,.08);background:rgba(7,10,20,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:rgba(234,246,255,.6);font-size:.9rem;letter-spacing:2px}
+footer i{color:var(--pink);margin:0 6px;animation:heartBeat 1.3s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(255,110,199,.8))}
+@keyframes heartBeat{0%,100%{transform:scale(1)}20%{transform:scale(1.3)}38%{transform:scale(1)}55%{transform:scale(1.18)}}
+
+/* ========== 图片灯箱（点击选项跳转到对应大图） ========== */
+.lightbox{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;padding:4vh 4vw;background:rgba(7,9,18,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s}
+.lightbox.open{opacity:1;visibility:visible}
+.lightbox.open .lb-inner{animation:lbPop .38s cubic-bezier(.18,1.25,.4,1) both}
+@keyframes lbPop{from{transform:scale(.9) translateY(14px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.lb-inner{position:relative;width:min(1050px,100%)}
+.lb-stage{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.18);background:#0b0e1a;box-shadow:0 0 0 2px rgba(79,195,255,.28),0 0 70px rgba(165,94,234,.45),0 34px 90px rgba(0,0,0,.65)}
+.lb-stage img{display:block;width:100%;max-height:74vh;object-fit:contain;background:#0b0e1a}
+.lb-info{position:absolute;left:0;right:0;bottom:0;padding:34px 34px 26px;background:linear-gradient(180deg,transparent,rgba(7,10,20,.96) 62%);pointer-events:none}
+.lb-info .lb-badge{display:inline-block;margin-bottom:10px;padding:4px 12px;border-radius:999px;border:1px solid rgba(255,215,131,.5);color:var(--gold);font-size:.7rem;letter-spacing:2px;background:rgba(255,215,131,.08)}
+.lb-info h3{font-family:'Montserrat','Noto Sans SC';font-size:clamp(1.3rem,3.4vw,1.9rem);font-weight:800;letter-spacing:2px;background:linear-gradient(90deg,var(--pink),var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(79,195,255,.45))}
+.lb-info p{margin-top:6px;color:rgba(234,246,255,.78);font-size:.9rem;letter-spacing:1px;line-height:1.8}
+.lb-btn{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(14,19,38,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;cursor:pointer;transition:all .3s ease}
+.lb-btn:hover{border-color:rgba(79,195,255,.8);box-shadow:0 0 18px rgba(79,195,255,.5);transform:scale(1.08)}
+.lb-close{top:18px;right:18px;font-size:1.1rem}
+.lb-close:hover{border-color:rgba(255,110,199,.8);box-shadow:0 0 18px rgba(255,110,199,.5)}
+.lb-prev{left:-58px;top:50%;transform:translateY(-50%)}
+.lb-next{right:-58px;top:50%;transform:translateY(-50%)}
+.lb-prev:hover,.lb-next:hover{transform:translateY(-50%) scale(1.08)}
+
+/* ========== 滚动显现 & 响应式 ========== */
+.reveal{opacity:0;transform:translateY(42px);transition:opacity .8s ease,transform .8s ease}
+.reveal.show{opacity:1;transform:none}
+@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.culture{gap:40px}.panda-box{flex:1 1 100%}}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .desc{padding:16px 24px}
+  .desc,.subtitle{letter-spacing:.2em}
+  .panda{font-size:6.5rem}
+  .panda-box::before{width:240px;height:240px}
+  .cards{grid-template-columns:1fr}
+  .card{padding:36px 22px}
+  .cta{padding:15px 40px}
+  section{padding:80px 6vw}
+  .hero{padding:120px 6vw 160px}
+  .music-btn{width:52px;height:52px;right:18px;bottom:18px}
+  .music-btn i{font-size:1.1rem}
+  .video-mute{left:6vw;bottom:22px}
+  .card-img{height:118px}
+  .card{padding:134px 22px 36px}
+  .food-banner{height:150px}
+  .culture-photo img{height:150px}
+  .lb-btn{width:40px;height:40px}
+  .lb-prev{left:8px}
+  .lb-next{right:8px}
+  .lb-info{padding:24px 20px 18px}
+  .lb-info p{font-size:.8rem}
+  .lb-stage img{max-height:66vh}
+}
+</style>
+</head>
+<body>
+<!-- ===== 动态全屏背景：四色光晕 + 45 颗闪烁星星（JS 生成） ===== -->
+<div id="bg">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+  <div class="orb o4"></div>
+  <div id="stars"></div>
+</div>
+
+<!-- ===== 导航栏 ===== -->
+<nav>
+  <a class="logo" href="#home">
+    <i class="fa-solid fa-dragon dragon"></i>
+    <span class="logo-text">成都·幻境</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">首页</a></li>
+    <li><a href="#explore">探索</a></li>
+    <li><a href="#culture">文化</a></li>
+    <li><a href="#food">美食</a></li>
+  </ul>
+</nav>
+
+<main>
+<!-- ===== Hero 主视觉 ===== -->
+<section id="home" class="hero">
+  <!-- 全屏背景视频（本地 video/chengdu.mp4，缺失时自动隐藏不影响页面） -->
+  <div class="hero-media">
+    <video id="bgVideo" autoplay muted loop playsinline preload="auto">
+      <source src="video/cd1.mp4" type="video/mp4">
+    </video>
+    <div class="hero-shade"></div>
+  </div>
+  <div class="hero-tag">✦ CHENGDU CYBER ANIME ✦</div>
+  <h1 class="title">成都</h1>
+  <div class="subtitle"><i class="fa-solid fa-star"></i>天府之国 · 动漫幻城<i class="fa-solid fa-star"></i></div>
+  <p class="desc">古蜀文明与<b>赛博霓虹</b>交织成一场梦幻漫游——火锅香气飘进摩天光影，熊猫在竹影与全息世界之间打盹。欢迎来到成都，一座自带<b>BGM 与滤镜</b>的动漫之城。</p>
+  <a href="#explore" class="cta">探索幻境 <i class="fa-solid fa-wand-magic-sparkles"></i></a>
+  <!-- SVG 波浪云纹 -->
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 170" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="rgba(165,94,234,.16)" d="M0,60 C180,106 360,26 540,48 C720,70 840,112 1020,94 C1200,76 1320,38 1440,70 L1440,170 L0,170 Z"/>
+      <path fill="rgba(79,195,255,.18)" d="M0,96 C200,70 420,124 660,106 C900,88 1120,126 1440,100 L1440,170 L0,170 Z"/>
+      <path fill="rgba(255,110,199,.14)" d="M0,128 C260,100 520,154 800,134 C1080,114 1280,146 1440,128 L1440,170 L0,170 Z"/>
+      <g fill="rgba(234,246,255,.16)">
+        <circle cx="150" cy="146" r="13"/><circle cx="175" cy="138" r="17"/><circle cx="200" cy="148" r="11"/>
+        <circle cx="700" cy="142" r="11"/><circle cx="722" cy="135" r="15"/><circle cx="745" cy="144" r="10"/>
+        <circle cx="1190" cy="148" r="12"/><circle cx="1215" cy="140" r="16"/><circle cx="1240" cy="150" r="10"/>
+      </g>
+    </svg>
+  </div>
+  <button id="videoMute" class="video-mute" title="背景视频 静音 / 取消静音">
+    <i class="fa-solid fa-volume-xmark"></i> 背景视频
+  </button>
+</section>
+<!-- ===== 探索 · 蓉城四韵 ===== -->
+<section id="explore">
+  <div class="section-head reveal">
+    <div class="kicker">EXPLORE CHENGDU</div>
+    <h2 class="section-title">蓉城 · 四韵</h2>
+    <p class="section-sub">四大名片 · 四种幻境 · 每一面都浪漫爆表</p>
+  </div>
+  <div class="cards">
+    <div class="card c-bear reveal" style="transition-delay:.05s">
+      <div class="card-img"><img src="images/card-bear.jpg" alt="熊猫之都" loading="lazy"></div>
+      <div class="icon"><i class="fa-solid fa-paw"></i></div>
+      <h3>熊猫之都</h3>
+      <p>圆滚滚的国宝在晨曦里打盹，在竹影间翻滚撒欢，是这座城市最治愈的二次元主角。</p>
+    </div>
+    <div class="card c-spicy reveal" style="transition-delay:.15s">
+      <div class="card-img"><img src="images/card-hotpot.jpg" alt="麻辣火锅" loading="lazy"></div>
+      <div class="icon"><i class="fa-solid fa-pepper-hot"></i></div>
+      <h3>麻辣幻味</h3>
+      <p>红油翻滚的火锅、椒香四溢的串串，一口入魂的麻辣鲜香，让味蕾开启冒险副本。</p>
+    </div>
+    <div class="card c-opera reveal" style="transition-delay:.25s">
+      <div class="card-img"><img src="images/card-opera.jpg" alt="川剧脸谱" loading="lazy"></div>
+      <div class="icon"><i class="fa-solid fa-masks-theater"></i></div>
+      <h3>川剧变脸</h3>
+      <p>一抬手风云变幻，一转身五色脸谱。千年川剧遇上霓虹舞台，戏未散、梦未醒。</p>
+    </div>
+    <div class="card c-taikoo reveal" style="transition-delay:.35s">
+      <div class="card-img"><img src="images/card-taikoo.jpg" alt="成都霓虹夜景" loading="lazy"></div>
+      <div class="icon"><i class="fa-solid fa-city"></i></div>
+      <h3>太古里 · 霓虹</h3>
+      <p>时尚与古韵在玻璃幕墙间共振，潮玩街区霓虹闪烁，赛博成都的封面担当。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 文化 · 动漫成都 ===== -->
+<section id="culture">
+  <div class="culture">
+    <div class="panda-box reveal">
+      <span class="panda">🐼</span>
+    </div>
+    <div class="culture-text">
+      <div class="section-head reveal" style="text-align:left;margin-bottom:0">
+        <div class="kicker">ANIME CHENGDU</div>
+        <h2 class="culture-title">动漫成都</h2>
+      </div>
+      <p class="culture-desc reveal">用动漫的方式打开成都：IFS 的巨型熊猫探出大楼，九眼桥的霓虹倒映锦江，盖碗茶的雾气里藏着次元结界。这座不夜城连路边的小熊猫都自带主角光环，随时等你来触发隐藏剧情。</p>
+      <div class="culture-photo reveal"><img src="images/culture-street.jpg" alt="成都霓虹街景" loading="lazy"></div>
+      <div class="tags reveal">
+        <a class="tag" href="#explore" data-place="panda"><i class="fa-solid fa-location-dot"></i>熊猫基地</a>
+        <a class="tag" href="#explore" data-place="kuanzhai"><i class="fa-solid fa-location-dot"></i>宽窄巷子</a>
+        <a class="tag" href="#explore" data-place="jinli"><i class="fa-solid fa-location-dot"></i>锦里</a>
+        <a class="tag" href="#explore" data-place="chunxi"><i class="fa-solid fa-location-dot"></i>春熙路</a>
+        <a class="tag" href="#explore" data-place="dujiangyan"><i class="fa-solid fa-location-dot"></i>都江堰</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 美食 · 川味食光 ===== -->
+<section id="food">
+  <div class="section-head reveal">
+    <div class="kicker">TASTE OF CHENGDU</div>
+    <h2 class="section-title">川味 · 食光</h2>
+    <p class="section-sub">从清晨的担担面，到深夜的宵夜摊，成都的烟火气永不下线</p>
+  </div>
+  <div class="food-banner reveal"><img src="images/food-banner.jpg" alt="四川美食" loading="lazy"></div>
+  <div class="food-strip">
+    <div class="food-item reveal" style="transition-delay:.05s" data-food="hotpot"><i class="fa-solid fa-fire"></i><span>九宫格火锅<small>HOT POT</small></span></div>
+    <div class="food-item reveal" style="transition-delay:.12s" data-food="dandan"><i class="fa-solid fa-bowl-food"></i><span>担担面<small>DANDAN NOODLES</small></span></div>
+    <div class="food-item reveal" style="transition-delay:.19s" data-food="wonton"><i class="fa-solid fa-utensils"></i><span>龙抄手<small>WONTONS</small></span></div>
+    <div class="food-item reveal" style="transition-delay:.26s" data-food="sanda"><i class="fa-solid fa-bread-slice"></i><span>三大炮<small>SNACK</small></span></div>
+    <div class="food-item reveal" style="transition-delay:.33s" data-food="bobo"><i class="fa-solid fa-bars-staggered"></i><span>钵钵鸡<small>SKEWERS</small></span></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>© 2026 成都·幻境 <i class="fa-solid fa-heart"></i> 此页面由动漫次元与赛博霓虹共同渲染</p>
+</footer>
+
+<!-- ===== 悬浮 BGM 按钮（本地 audio/bgm.mp3） ===== -->
+<button id="musicBtn" class="music-btn" title="播放 BGM" aria-label="播放/暂停背景音乐">
+  <i class="fa-solid fa-music"></i>
+  <span class="eq"><i></i><i></i><i></i></span>
+</button>
+<audio id="bgm" loop preload="auto">
+  <source src="audio/蔡琴明月几时有.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===== 图片灯箱 ===== -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+  <div class="lb-inner">
+    <button class="lb-btn lb-close" id="lbClose" title="关闭"><i class="fa-solid fa-xmark"></i></button>
+    <button class="lb-btn lb-prev" id="lbPrev" title="上一张"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="lb-btn lb-next" id="lbNext" title="下一张"><i class="fa-solid fa-chevron-right"></i></button>
+    <div class="lb-stage">
+      <img id="lbImg" src="" alt="">
+      <div class="lb-info">
+        <span class="lb-badge">CHENGDU ✦ PEXELS 免费图库</span>
+        <h3 id="lbTitle"></h3>
+        <p id="lbDesc"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 背景视频：加载失败时自动隐藏，保留原渐变背景 =====
+const bgVideo = document.getElementById('bgVideo');
+if (bgVideo) {
+  bgVideo.addEventListener('error', () => {
+    const m = document.querySelector('.hero-media');
+    if (m) m.style.display = 'none';
+  });
+}
+
+// ===== 背景视频静音切换 =====
+const videoMute = document.getElementById('videoMute');
+if (bgVideo && videoMute) {
+  videoMute.addEventListener('click', () => {
+    bgVideo.muted = !bgVideo.muted;
+    videoMute.querySelector('i').className = bgVideo.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+  });
+}
+
+// ===== 悬浮 BGM 播放 / 暂停 =====
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicBtn');
+const musicIcon = musicBtn ? musicBtn.querySelector('i') : null;
+if (bgm && musicBtn) {
+  musicBtn.addEventListener('click', () => {
+    if (bgm.paused) {
+      bgm.play().then(() => {
+        musicBtn.classList.add('playing');
+        musicBtn.title = '暂停 BGM';
+        if (musicIcon) musicIcon.className = 'fa-solid fa-volume-high';
+      }).catch(() => {});
+    } else {
+      bgm.pause();
+      musicBtn.classList.remove('playing');
+      musicBtn.title = '播放 BGM';
+      if (musicIcon) musicIcon.className = 'fa-solid fa-music';
+    }
+  });
+  // 音频文件缺失时置灰并提示
+  bgm.addEventListener('error', () => {
+    musicBtn.classList.add('disabled');
+    musicBtn.removeAttribute('title');
+    musicBtn.title = '未找到音频文件';
+    if (musicIcon) musicIcon.className = 'fa-solid fa-music';
+  });
+}
+
+// ===== 45 颗闪烁星星：随机位置 / 大小 / 颜色 / 节奏 =====
+const starColors = ['#ff6ec7', '#4fc3ff', '#a55eea', '#ffd76e'];
+const starsBox = document.getElementById('stars');
+for (let i = 0; i < 45; i++) {
+  const s = document.createElement('span');
+  s.className = 'star';
+  const size = (Math.random() * 3 + 2).toFixed(2);
+  const color = starColors[Math.floor(Math.random() * starColors.length)];
+  s.style.width = size + 'px';
+  s.style.height = size + 'px';
+  s.style.left = Math.random() * 100 + '%';
+  s.style.top = Math.random() * 100 + '%';
+  s.style.background = color;
+  s.style.boxShadow = '0 0 ' + (size * 2.5) + 'px ' + color;
+  s.style.setProperty('--dur', (Math.random() * 2.6 + 1.4).toFixed(2) + 's');
+  s.style.animationDelay = (-Math.random() * 4).toFixed(2) + 's';
+  starsBox.appendChild(s);
+}
+
+// ===== CTA 按钮：点击缩放反馈 =====
+document.querySelector('.cta').addEventListener('click', function () {
+  this.classList.add('clicked');
+  setTimeout(() => this.classList.remove('clicked'), 160);
+});
+
+// ===== 图片灯箱：点击选项跳转到对应大图（组内可左右切换） =====
+const gallery = [
+  // —— 文化 · 景点 ——
+  { group: 'culture', key: 'panda',      src: 'images/card-bear.jpg',          title: '熊猫基地', desc: '成都大熊猫繁育研究基地，圆滚滚们的快乐老家，治愈力满格。' },
+  { group: 'culture', key: 'kuanzhai',   src: 'images/culture-kuanzhai.jpg',   title: '宽窄巷子', desc: '青黛砖瓦的民国老街，盖碗茶与霓虹咖啡馆在同一屋檐下共舞。' },
+  { group: 'culture', key: 'jinli',      src: 'images/culture-jinli.jpg',      title: '锦里',     desc: '西蜀最古老的街道之一，灯笼如昼的民俗夜市，一秒穿越三国。' },
+  { group: 'culture', key: 'chunxi',     src: 'images/culture-chunxi.jpg',     title: '春熙路',   desc: '百年金街与时尚地标交织，成都最潮的霓虹购物天堂。' },
+  { group: 'culture', key: 'dujiangyan', src: 'images/culture-dujiangyan.jpg', title: '都江堰',   desc: '岷江上的千年无坝引水工程，两千余年的东方智慧传奇。' },
+  // —— 美食 · 川味 ——
+  { group: 'food', key: 'hotpot', src: 'images/card-hotpot.jpg', title: '九宫格火锅', desc: '红油翻滚的九宫格，涮遍毛肚黄喉，成都烟火气的灵魂。' },
+  { group: 'food', key: 'dandan', src: 'images/food-dandan.jpg', title: '担担面',     desc: '肉臊花生碎配上红油，一碗咸鲜微辣的蜀地名面。' },
+  { group: 'food', key: 'wonton', src: 'images/food-wonton.jpg', title: '龙抄手',     desc: '皮薄馅嫩的成都馄饨，红汤清汤皆是心头好。' },
+  { group: 'food', key: 'sanda',  src: 'images/food-sanda.jpg',  title: '三大炮',     desc: '糯米团弹过铜盘砰砰响，裹上黄豆粉与红糖浆，口口软糯。' },
+  { group: 'food', key: 'bobo',   src: 'images/food-bobo.jpg',   title: '钵钵鸡',     desc: '竹签串起的冷泡麻辣，一口一串停不下来。' }
+];
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbTitle = document.getElementById('lbTitle');
+const lbDesc = document.getElementById('lbDesc');
+let lbCur = 0;
+function openLightbox(idx) {
+  if (idx < 0) return;
+  lbCur = idx;
+  const g = gallery[lbCur];
+  lbImg.src = g.src;
+  lbImg.alt = g.title;
+  lbTitle.textContent = g.title;
+  lbDesc.textContent = g.desc;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+function stepLightbox(dir) {
+  const list = gallery.map((e, i) => ({ e, i })).filter(x => x.e.group === gallery[lbCur].group);
+  const pos = list.findIndex(x => x.i === lbCur);
+  openLightbox(list[(pos + dir + list.length) % list.length].i);
+}
+document.querySelectorAll('.tag[data-place]').forEach(t => t.addEventListener('click', e => {
+  e.preventDefault();
+  const i = gallery.findIndex(g => g.group === 'culture' && g.key === t.dataset.place);
+  openLightbox(i);
+}));
+document.querySelectorAll('.food-item[data-food]').forEach(f => f.addEventListener('click', () => {
+  const i = gallery.findIndex(g => g.group === 'food' && g.key === f.dataset.food);
+  openLightbox(i);
+}));
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+document.getElementById('lbPrev').addEventListener('click', () => stepLightbox(-1));
+document.getElementById('lbNext').addEventListener('click', () => stepLightbox(1));
+lb.addEventListener('click', e => { if (e.target === lb) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') stepLightbox(-1);
+  if (e.key === 'ArrowRight') stepLightbox(1);
+});
+
+// ===== 滚动显现（IntersectionObserver） =====
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); }
+  });
+}, { threshold: .15 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
